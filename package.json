@@ -15,5 +15,8 @@
     "nami-api"
   ],
   "author": "TrakaDev",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@emurgo/cardano-serialization-lib-asmjs": "^10.0.4"
+  }
 }
