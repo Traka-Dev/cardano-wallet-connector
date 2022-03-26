@@ -35,7 +35,7 @@ export async function searchForWallet (cardano_window, walletName) {
  * 
  * @param {cardano WalletObject enabled object} WalletObject 
  * @param {String} blockfrostApiKey 
- * @param {Cardano Serialization Lib serializationLib} serializationLib 
+ * @param {cardano-serialization-lib-browser} serializationLib 
  */
 export async function Wallet(WalletObject, blockfrostApiKey, serializationLib=null){
     const CSL = serializationLib || await import('@emurgo/cardano-serialization-lib-asmjs')    
@@ -175,11 +175,11 @@ export async function Wallet(WalletObject, blockfrostApiKey, serializationLib=nu
 
     /**
      * 
-     * @param {*} recipients 
-     * @param {*} metadata 
-     * @param {*} metadataLabel 
+     * @param {Array} recipients 
+     * @param {Object} metadata 
+     * @param {String} metadataLabel 
      */
-    const sendMultiple = (recipients = [], metadata = null, metadataLabel = '721') => {
+    const sendMultiple = async (recipients = [], metadata = null, metadataLabel = '721') => {
         const PaymentAddress = await getAddress()
         const protocolParameter = await __getProtocolParameter()
         const utxos = (await getUtxosHex()).map(u => CSL.TransactionUnspentOutput.from_bytes(Buffer.from(e,'hex')))
@@ -214,7 +214,7 @@ export async function Wallet(WalletObject, blockfrostApiKey, serializationLib=nu
         return await __signSubmitTx(RawTransaction)
     }
 
-    const delegate = (poolId, metadata = null, metadataLabel = '721') => {
+    const delegate = async (poolId, metadata = null, metadataLabel = '721') => {
         const protocolParameter = await __getProtocolParameter()
         
         const stakeKeyHash = CSL.RewardAddress.from_address(CSL.Address.from_bytes(Buffer.from(await getRewardAddressHex(),'hex'))).payment_cred().to_keyhash().to_bytes()
@@ -257,7 +257,7 @@ export async function Wallet(WalletObject, blockfrostApiKey, serializationLib=nu
         const txHash = await __signSubmitTx(transaction)
         return txHash
     }
-    
+
     // AUX START //
 
     const AsciiToBuffer = (string) => Buffer.from(string, "ascii")
